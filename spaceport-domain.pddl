@@ -33,6 +33,7 @@
         (exploring_planet ?p - planet)
 
         (is_damaged)
+        (travelling)
         (on_region ?r - region)
         (on_planet ?p - planet)
 
@@ -107,6 +108,7 @@
             (?c - captain ?n - navigator ?brdg - bridge ?to - region)
         :precondition
             (and
+                (not (travelling))
                 (not (on_region ?to))
                 ; Captain is on the bridge.
                 (is_on ?c ?brdg)
@@ -120,23 +122,25 @@
         :effect
             (and
                 (received_order_to_travel ?n ?to)
+                (travelling)
             )
     )
 
     ; The spacecraft travels to a region of space.
     (:action travelling_to_region
         :parameters
-            (?controlledBy - navigator ?controlledFrom - bridge ?from - region ?to - region)
+            (?controlledBy - navigator ?controlledFrom - bridge ?from - region ?to - region ?destination - region)
         :precondition
             (and
                 (on_region ?from)
                 (or (adjacent ?from ?to) (adjacent ?to ?from))
                 ; The ship isn’t damaged.
+                (travelling)
                 (not (is_damaged))
                 ; Navigator is on the bridge.
                 (is_on ?controlledBy ?controlledFrom)
                 ; The navigator must have received an order to travel to that region.
-                (received_order_to_travel ?controlledBy ?to)
+                (received_order_to_travel ?controlledBy ?destination)
                 ; The spacecraft cannot leave if a probe is deployed on a planet.
                 (forall (?p - probe)
                     (or (destroyed ?p) (on_board ?p))
@@ -146,11 +150,16 @@
             (and
                 (not (on_region ?from))
                 (on_region ?to)
-                ; Ship has reached destination, so navigator becomes idle.
-                (not (received_order_to_travel ?controlledBy ?to))
                 ; The spacecraft enters a region with an asteroid belt and becomes damaged.
                 (when (has_asteroid_belt ?to)
                     (is_damaged)
+                )
+                (when (= ?to ?destination)
+                    (and
+                        ; Ship has reached destination, so navigator becomes idle.
+                        (not (received_order_to_travel ?controlledBy ?destination))
+                        (not (travelling))
+                    )
                 )
             )
     )
@@ -258,6 +267,7 @@
             (?prb - probe ?at - region ?nbl - nebula ?controlledBy - engineer ?bay - launchBay)
         :precondition
             (and
+                (not (travelling))
                 ; The ship is on a region with nebula.
                 (not (is_damaged))
                 (on_region ?at)
@@ -308,6 +318,7 @@
             (?prb - probe ?at - region ?plnt - planet ?controlledBy - engineer ?bay - launchBay)
         :precondition
             (and
+                (not (travelling))
                 (on_board ?prb)
                 ; The planet hasn't been visited yet.
                 (not (scanning_surface_of_planet ?plnt))
@@ -406,6 +417,7 @@
             (?l - lander ?p - planet ?at - region)
         :precondition
             (and
+                (not (travelling))
                 (scanned_planet ?p)
                 (not (scanning_surface_of_planet ?p))
                 (not (is_damaged))

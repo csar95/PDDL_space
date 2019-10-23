@@ -77,6 +77,7 @@
             ;)
             (results_of_planetary_scan jupiter)
             (on_planet earth)
+            (not (travelling))
         )
     )
 )
