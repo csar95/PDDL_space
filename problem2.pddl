@@ -7,7 +7,7 @@
         captain - captain
         engineer1 engineer2 engineer3 - engineer ; There must be at least three
         officer1 officer2 - scienceOfficer
-        navigator1 - navigator
+        navigator1 navigator2 - navigator
         rescuer1 - rescuer
 
         bridge - bridge

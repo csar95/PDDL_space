@@ -7,7 +7,7 @@
         captain - captain
         engineer1 engineer2 engineer3 - engineer ; There must be at least three
         officer1 officer2 - scienceOfficer
-        navigator1 - navigator
+        navigator1 navigator2 - navigator
         rescuer1 - rescuer
 
         bridge - bridge
@@ -43,7 +43,6 @@
         (contains region1 earth)
         (contains region2 mars)
         (contains region3 nebula1)
-        (has_asteroid_belt region3)
         (contains region4 jupiter)
 
         (adjacent region1 region2)
@@ -67,14 +66,9 @@
 
     (:goal
         (and
-            ;(studies_of_plasma_from_nebula nebula1)
-            ;(or 
-             ;   (results_of_planetary_scan jupiter)
-              ;  (forall (?l - lander)
-               ;     (crashed ?l)
-                ;)
-            ;)
             (results_of_planetary_scan jupiter)
+            (not (scanned_planet earth))
+            (not (scanned_planet mars))
             (on_planet earth)
             (not (travelling))
         )
