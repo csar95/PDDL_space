@@ -37,13 +37,10 @@
         (on_region ?r - region)
         (on_planet ?p - planet)
 
-        ; Ready to be launched from the launch bay
-        (on_board ?d - device)
-        (destroyed ?p - probe)
+        (on_board ?d - device)  ; Ready to be launched from the launch bay.
+        (disabled ?d - device)  ; Either destroyed in an asteroid belt (probe), crashed on a planet (lander) or disabled while repairing (MAV).
         (deployed_to_study_at ?p - probe ?z - entity ?r - region)        
-        (disabled ?r - mav)
         (landed_on_planet ?l - lander ?p - planet)
-        (crashed ?l - lander)
         (deployed_one_antenna ?l - lander)
         (deployed_two_antennae ?l - lander)
 
@@ -124,7 +121,7 @@
     ; The spacecraft travels to a region of space.
     (:action travelling_to_region
         :parameters
-            (?controlledBy - navigator ?controlledFrom - bridge ?from - region ?to - region ?destination - region)
+            (?nav - navigator ?controlledFrom - bridge ?from - region ?to - region ?destination - region)
         :precondition
             (and
                 (on_region ?from)
@@ -133,12 +130,12 @@
                 (travelling)
                 (not (is_damaged))
                 ; Navigator is on the bridge.
-                (is_on ?controlledBy ?controlledFrom)
+                (is_on ?nav ?controlledFrom)
                 ; The navigator must have received an order to travel to that region.
-                (received_order_to_travel ?controlledBy ?destination)
+                (received_order_to_travel ?nav ?destination)
                 ; The spacecraft cannot leave if a probe is deployed on a planet.
-                (forall (?p - probe)
-                    (or (destroyed ?p) (on_board ?p))
+                (forall (?prb - probe)
+                    (or (disabled ?prb) (on_board ?prb))
                 )
             )
         :effect
@@ -152,7 +149,7 @@
                 (when (= ?to ?destination)
                     (and
                         ; Ship has reached destination, so navigator becomes idle.
-                        (not (received_order_to_travel ?controlledBy ?destination))
+                        (not (received_order_to_travel ?nav ?destination))
                         (not (travelling))
                     )
                 )
@@ -271,7 +268,7 @@
                 (contains ?at ?nbl)
                 ; There is a probe on board ready to be sent.
                 (on_board ?prb)
-                (not (destroyed ?prb))                
+                (not (disabled ?prb))                
                 ; An engineer is in the launch bay to operate the launch controls.
                 (is_on ?controlledBy ?bay)
             )
@@ -282,7 +279,7 @@
                     (deployed_to_study_at ?prb ?nbl ?at)
                 )
                 (when (has_asteroid_belt ?at)
-                    (destroyed ?prb)
+                    (disabled ?prb)
                 )
             )
     )
@@ -295,7 +292,7 @@
                 (on_region ?at)
 
                 (not (on_board ?prb))
-                (not (destroyed ?prb))
+                (not (disabled ?prb))
                 (deployed_to_study_at ?prb ?nbl ?at)
                 ; An engineer is present in launch bay.
                 (is_on ?controlledBy ?bay)
@@ -325,7 +322,7 @@
                 (on_region ?at)
                 (contains ?at ?plnt)
                 ; There is a probe on board ready to be sent.
-                (not (destroyed ?prb))
+                (not (disabled ?prb))
                 ; An engineer is in the launch bay to operate the launch controls.
                 (is_on ?controlledBy ?bay)
             )
@@ -337,7 +334,7 @@
                     (deployed_to_study_at ?prb ?plnt ?at)
                 )
                 (when (has_asteroid_belt ?at)
-                    (destroyed ?prb)
+                    (disabled ?prb)
                 )
             )
     )
@@ -351,7 +348,7 @@
                 (contains ?at ?plnt)
                 (scanning_surface_of_planet ?plnt)
                 (not (on_board ?prb))
-                (not (destroyed ?prb))
+                (not (disabled ?prb))
                 (deployed_to_study_at ?prb ?plnt ?at)
                 ; An engineer is present in launch bay.
                 (is_on ?controlledBy ?bay)
@@ -439,7 +436,7 @@
                     (deployed_two_antennae ?l)
                 )
                 (when (not (info_of_touchdown_location ?p))
-                    (crashed ?l)
+                    (disabled ?l)
                 )
             )
     )
@@ -451,7 +448,7 @@
         :precondition
             (and
                 (not (on_board ?l))
-                (not (crashed ?l))
+                (not (disabled ?l))
                 (landed_on_planet ?l ?p)
                 (exploring_planet ?p)
                 (or (deployed_one_antenna ?l) (deployed_two_antennae ?l))
