@@ -16,7 +16,6 @@
         (has_place_to_land ?p - planet)
         ; When a region doesn't contain anything, it's empty.
         (has_asteroid_belt ?r - region)
-        (has_nebula ?r - region)
         (contains ?r - region ?x - entity)
         (adjacent ?r1 - region ?r2 - region)
 
@@ -25,8 +24,9 @@
         (is_on ?p - personnel ?s - section)
         (received_order_to_travel ?p - navigator ?r - region)
         (transferring_plasma_from ?p - scienceOfficer ?n - nebula)
-        (rescuing ?p - rescuer)
+        (repairing_inside_MAV ?p - engineer ?m - mav)
         (calling_for_help ?p - engineer)
+        (rescuing ?p - rescuer)
         
         (scanning_surface_of_planet ?p - planet)
         (scanned_planet ?p - planet)
@@ -40,8 +40,7 @@
         ; Ready to be launched from the launch bay
         (on_board ?d - device)
         (destroyed ?p - probe)
-        (deployed_to_study_at ?p - probe ?z - entity ?r - region)
-        (repairing_inside_MAV ?p - engineer ?m - mav)
+        (deployed_to_study_at ?p - probe ?z - entity ?r - region)        
         (disabled ?r - mav)
         (landed_on_planet ?l - lander ?p - planet)
         (crashed ?l - lander)
@@ -114,10 +113,6 @@
                 (is_on ?c ?brdg)
                 ; Navigator is present to receive the order.
                 (is_on ?n ?brdg)
-                ; Navigator not working
-                (forall (?r - region)
-                    (not (received_order_to_travel ?n ?r))
-                )
             )
         :effect
             (and
@@ -190,12 +185,14 @@
                 (repairing_inside_MAV ?pilot ?m)
                 ; Engineer inside MAV leaves the launch bay.
                 (not (is_on ?pilot ?bay))
-                (when (has_nebula ?at)
-                    (and
-                        (disabled ?m)
-                        (calling_for_help ?pilot)
+                (forall (?nbl - nebula)
+                    (when (contains ?at ?nbl)
+                        (and
+                            (disabled ?m)
+                            (calling_for_help ?pilot)
+                        )
                     )
-                )                
+                )
             )
     )
 

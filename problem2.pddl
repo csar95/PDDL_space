@@ -1,4 +1,4 @@
-﻿(define (problem problem1)
+﻿(define (problem problem2)
     (:domain spaceport)
 
     (:objects
@@ -44,7 +44,7 @@
         (contains region2 mars)
         (contains region3 nebula1)
         (has_asteroid_belt region3)
-        (contains region4 jupiter)
+        (contains region4 nebula2)
 
         (adjacent region1 region2)
         (adjacent region2 region3)
@@ -67,14 +67,10 @@
 
     (:goal
         (and
-            ;(studies_of_plasma_from_nebula nebula1)
-            ;(or 
-             ;   (results_of_planetary_scan jupiter)
-              ;  (forall (?l - lander)
-               ;     (crashed ?l)
-                ;)
-            ;)
-            (results_of_planetary_scan jupiter)
+            (studies_of_plasma_from_nebula nebula2)
+            (not (scanned_planet jupiter))
+            (not (scanned_planet earth))
+            (not (scanned_planet mars))
             (on_planet earth)
             (not (travelling))
         )
