@@ -12,14 +12,13 @@
     )
 
     (:predicates
-        (high_radiation ?p - planet)
-        (has_place_to_land ?p - planet)
-        ; When a region doesn't contain anything, it's empty.
-        (has_asteroid_belt ?r - region)
-        (contains ?r - region ?x - entity)
+        (connected ?s1 - section ?s2 - section)
         (adjacent ?r1 - region ?r2 - region)
 
-        (connected ?s1 - section ?s2 - section)
+        (contains ?r - region ?x - entity)  ; When a region doesn't contain anything, it's empty.
+        (has_asteroid_belt ?r - region)
+        (has_place_to_land ?p - planet)
+        (high_radiation ?p - planet)
 
         (is_on ?p - personnel ?s - section)
         (received_order_to_travel ?p - navigator ?r - region)
@@ -27,15 +26,6 @@
         (repairing_inside_MAV ?p - engineer ?m - mav)
         (calling_for_help ?p - engineer)
         (rescuing ?p - rescuer)
-        
-        (scanning_surface_of_planet ?p - planet)
-        (scanned_planet ?p - planet)
-        (exploring_planet ?p - planet)
-
-        (is_damaged)
-        (travelling)
-        (on_region ?r - region)
-        (on_planet ?p - planet)
 
         (on_board ?d - device)  ; Ready to be launched from the launch bay.
         (disabled ?d - device)  ; Either destroyed in an asteroid belt (probe), crashed on a planet (lander) or disabled while repairing (MAV).
@@ -44,11 +34,17 @@
         (deployed_one_antenna ?l - lander)
         (deployed_two_antennae ?l - lander)
 
-        (plasma_from_nebula_at_section ?n - nebula ?s - section)
-        (studies_of_plasma_from_nebula ?n - nebula)
-        ; There exist scans of a planet in spacecraft’s central computer.
+        (on_region ?r - region)
+        (on_planet ?p - planet)
+        (travelling)
+        (is_damaged)
+        (scanning_surface_of_planet ?p - planet)
+        (exploring_planet ?p - planet)
+        (scanned_planet ?p - planet)
         (info_of_touchdown_location ?p - planet)
-        (results_of_planetary_scan ?p - planet)
+        (results_of_planetary_scan ?p - planet)  ; There exist scans of a planet in spacecraft’s central computer.
+        (studies_of_plasma_from_nebula ?n - nebula)
+        (plasma_from_nebula_at_section ?n - nebula ?s - section)        
     )
 
     (:action launch_spacecraft
