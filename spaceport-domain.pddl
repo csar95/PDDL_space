@@ -18,6 +18,7 @@
         (contains ?r - region ?x - entity)  ; When a region doesn't contain anything, it's empty.
         (has_asteroid_belt ?r - region)
         (has_place_to_land ?p - planet)
+        (has_spaceport ?p - planet)
         (high_radiation ?p - planet)
 
         (is_on ?p - personnel ?s - section)
@@ -44,7 +45,8 @@
         (info_of_touchdown_location ?p - planet)
         (results_of_planetary_scan ?p - planet)  ; There exist scans of a planet in spacecraft’s central computer.
         (studies_of_plasma_from_nebula ?n - nebula)
-        (plasma_from_nebula_at_section ?n - nebula ?s - section)        
+        (plasma_from_nebula_at_section ?n - nebula ?s - section)
+        (end_missions)
     )
 
     (:action launch_spacecraft
@@ -70,6 +72,9 @@
                 (info_of_touchdown_location ?p)
                 (on_region ?from)
                 (contains ?from ?p)
+                (forall (?prb - probe)
+                    (or (disabled ?prb) (on_board ?prb))
+                )
             )
         :effect
             (and
@@ -308,6 +313,7 @@
             (?prb - probe ?at - region ?plnt - planet ?controlledBy - engineer ?bay - launchBay)
         :precondition
             (and
+                (not (end_missions))
                 (not (travelling))
                 (on_board ?prb)
                 ; The planet hasn't been visited yet.
@@ -387,6 +393,7 @@
             (?officer - scienceOfficer ?nbl - nebula ?lab - scienceLab)
         :precondition
             (and
+                (not (end_missions))
                 ; The officer brings the plasma.
                 (transferring_plasma_from ?officer ?nbl)
                 ; Plasma studies must take place in the science lab. Only science officers can study plasma.
@@ -443,6 +450,7 @@
             (?p - planet ?l - lander)
         :precondition
             (and
+                (not (end_missions))
                 (not (on_board ?l))
                 (not (disabled ?l))
                 (landed_on_planet ?l ?p)
@@ -451,6 +459,19 @@
             )
         :effect
             (results_of_planetary_scan ?p)
+    )
+    
+    (:action communicate_results_to_mission_control
+        :parameters
+            (?plnt - planet)
+        :precondition
+            (and
+                (not (travelling))
+                (on_planet ?plnt)
+                (has_spaceport ?plnt)
+            )
+        :effect
+            (end_missions)
     )
     
 )

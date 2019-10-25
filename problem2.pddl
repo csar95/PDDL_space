@@ -16,7 +16,7 @@
         engineering - engineering
         s1 - bedrooms
 
-        probe1 probe2 - probe
+        probe1 - probe
         lander1 lander2 - lander
         mav1 mav2 - mav
         capsule1 - capsule
@@ -33,6 +33,7 @@
         (on_board capsule1)
 
         (on_planet earth)
+        (has_spaceport earth)
         
         (high_radiation jupiter)
         (has_place_to_land earth)
@@ -67,12 +68,10 @@
 
     (:goal
         (and
-            (studies_of_plasma_from_nebula nebula2)
-            (not (scanned_planet jupiter))
             (not (scanned_planet earth))
             (not (scanned_planet mars))
-            (on_planet earth)
-            (not (travelling))
+            (studies_of_plasma_from_nebula nebula2)
+            (end_missions)
         )
     )
 )

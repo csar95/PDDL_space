@@ -33,6 +33,7 @@
         (on_board capsule1)
 
         (on_planet earth)
+        (has_spaceport earth)
         
         (high_radiation jupiter)
         (has_place_to_land earth)
@@ -66,11 +67,10 @@
 
     (:goal
         (and
-            (results_of_planetary_scan jupiter)
             (not (scanned_planet earth))
             (not (scanned_planet mars))
-            (on_planet earth)
-            (not (travelling))
+            (results_of_planetary_scan jupiter)
+            (end_missions)
         )
     )
 )

@@ -17,12 +17,11 @@
         s1 - bedrooms
 
         probe1 - probe
-        lander1 lander2 lander3 lander4 lander5 lander6 lander7 lander8 - lander
+        lander1 lander2 lander3 lander4 lander5 lander6 lander7 - lander
         mav1 - mav
         capsule1 - capsule
 
         mercury venus earth mars jupiter saturn uranus neptune - planet
-        ;earth mars - planet
         nebula1 - nebula
     )
 
@@ -35,13 +34,13 @@
         (on_board lander5)
         (on_board lander6)
         (on_board lander7)
-        (on_board lander8)
         (on_board capsule1)
 
         (on_planet earth)
+        (has_spaceport earth)
         
-        (has_place_to_land earth)
         (info_of_touchdown_location earth)
+        (has_place_to_land earth)
         (has_place_to_land mars)
         (has_place_to_land jupiter)
         (has_place_to_land saturn)
@@ -83,6 +82,7 @@
 
     (:goal
         (and
+            (not (scanned_planet earth))
             (results_of_planetary_scan mars)
             (results_of_planetary_scan jupiter)
             (results_of_planetary_scan saturn)
@@ -90,8 +90,7 @@
             (results_of_planetary_scan neptune)
             (results_of_planetary_scan mercury)
             (results_of_planetary_scan venus)
-            (on_planet earth)
-            (not (travelling))
+            (end_missions)
         )
     )
 )
