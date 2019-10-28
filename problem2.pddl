@@ -43,6 +43,7 @@
         (has_spaceport earth)
         (info_of_touchdown_location earth)
         
+        ; All planets have a place to land
         (has_place_to_land earth)
         (has_place_to_land mars)
         (has_place_to_land jupiter)

@@ -1,5 +1,5 @@
 ; #################################### PROBLEM DESCRIPTION ####################################
-; This problem tests that landers and probes can crash or be destroyed if a planet doesn't have
+; This problem proves that landers and probes can crash or be destroyed if a planet doesn't have
 ; a place to land or the region has an asteroid belt.
 ; #############################################################################################
 
@@ -42,6 +42,7 @@
         (has_spaceport earth)
         (info_of_touchdown_location earth)
         
+        ; All planets excepct Jupiter have a place to land
         (has_place_to_land earth)
         (has_place_to_land mars)
         

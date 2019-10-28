@@ -39,9 +39,9 @@
 
         (on_planet earth)
         (has_spaceport earth)
-        (info_of_touchdown_location earth)
+        (info_of_touchdown_location earth)  ; We already know the touchdown location of the Earth so the spacecraft can land.
         
-        (has_place_to_land earth)
+        (has_place_to_land earth)           ; All planets have a place to land
         (has_place_to_land mars)
         
         (contains region1 earth)

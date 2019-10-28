@@ -1,7 +1,8 @@
 ; #################################### PROBLEM DESCRIPTION ####################################
 ; This problem tests the addition feature implemented on this domain, which sends a rescuer in
 ; a capsule to fix the disabled MAV in a region with asteroids and nebula. In addition, the
-; spacecraft needs to complete a serie of missions along the way.
+; spacecraft needs to complete a serie of missions along the way. Please, note that in this
+; problem Jupiter has high radiation.
 ; #############################################################################################
 
 
@@ -43,16 +44,19 @@
         (has_spaceport earth)
         (info_of_touchdown_location earth)
         
+        ; All planets have a place to land.
         (has_place_to_land earth)
         (has_place_to_land mars)
         (has_place_to_land jupiter)
+        (high_radiation jupiter)
         
         (contains region1 earth)
         (contains region2 mars)
+        ; Region 2 contains asteroids and a nebula so MAVs will be disabled when the leave the ship.
         (contains region2 nebula1)
         (has_asteroid_belt region2)
         (contains region3 nebula2)
-        ; Region 4 is empty
+        ; Note that in this problem region 4 is empty.
         (contains region5 jupiter)
 
         (adjacent region1 region2)
