@@ -1,11 +1,11 @@
-﻿; #################################### PROBLEM DESCRIPTION ####################################
-; This problem tests a scenario where the spacecraft's mission consists of several operations.
-; On the way it needs to pass through a region which contains an asteroid belt, adding a bit of
-; complexity to the mission.
+; #################################### PROBLEM DESCRIPTION ####################################
+; This problem tests the addition feature implemented on this domain, which sends a rescuer in
+; a capsule to fix the disabled MAV in a region with asteroids and nebula. In addition, the
+; spacecraft needs to complete a serie of missions along the way.
 ; #############################################################################################
 
 
-(define (problem problem2)
+(define (problem problem4)
     (:domain spaceport)
 
     (:objects
@@ -49,10 +49,11 @@
         
         (contains region1 earth)
         (contains region2 mars)
-        (has_asteroid_belt region3)
-        (contains region4 jupiter)
-        (contains region4 nebula1)
-        (contains region5 nebula2)
+        (contains region2 nebula1)
+        (has_asteroid_belt region2)
+        (contains region3 nebula2)
+        ; Region 4 is empty
+        (contains region5 jupiter)
 
         (adjacent region1 region2)
         (adjacent region2 region3)
@@ -76,9 +77,7 @@
     (:goal
         (and
             (not (scanned_planet earth))
-            (results_of_planetary_scan mars)
             (results_of_planetary_scan jupiter)
-            (studies_of_plasma_from_nebula nebula1)
             (studies_of_plasma_from_nebula nebula2)
             (end_missions)
         )

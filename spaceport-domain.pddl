@@ -329,11 +329,13 @@
                 (is_on ?controlledBy ?bay)
             )
         :effect
-            (and
-                (scanning_surface_of_planet ?plnt)
+            (and                
                 (not (on_board ?prb))
                 (when (not (has_asteroid_belt ?at))
-                    (deployed_to_study_at ?prb ?plnt ?at)
+                    (and
+                        (scanning_surface_of_planet ?plnt)
+                        (deployed_to_study_at ?prb ?plnt ?at)
+                    )
                 )
                 (when (has_asteroid_belt ?at)
                     (disabled ?prb)

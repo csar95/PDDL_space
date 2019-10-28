@@ -1,15 +1,14 @@
-﻿; #################################### PROBLEM DESCRIPTION ####################################
-; This problem tests a scenario where the spacecraft's mission consists of several operations.
-; On the way it needs to pass through a region which contains an asteroid belt, adding a bit of
-; complexity to the mission.
+; #################################### PROBLEM DESCRIPTION ####################################
+; This problem tests that landers and probes can crash or be destroyed if a planet doesn't have
+; a place to land or the region has an asteroid belt.
 ; #############################################################################################
 
 
-(define (problem problem2)
+(define (problem problem3)
     (:domain spaceport)
 
     (:objects
-        region1 region2 region3 region4 region5 - region
+        region1 region2 region3 - region
 
         captain - captain
         engineer1 engineer2 engineer3 - engineer
@@ -29,7 +28,7 @@
         capsule1 - capsule
 
         earth mars jupiter - planet
-        nebula1 nebula2 - nebula
+        nebula1 - nebula
     )
 
     (:init
@@ -45,19 +44,14 @@
         
         (has_place_to_land earth)
         (has_place_to_land mars)
-        (has_place_to_land jupiter)
         
         (contains region1 earth)
         (contains region2 mars)
-        (has_asteroid_belt region3)
-        (contains region4 jupiter)
-        (contains region4 nebula1)
-        (contains region5 nebula2)
+        (has_asteroid_belt region2)
+        (contains region3 jupiter)
 
         (adjacent region1 region2)
         (adjacent region2 region3)
-        (adjacent region3 region4)
-        (adjacent region4 region5)
 
         (connected s1 launchBay)
         (connected s1 bridge)
@@ -76,10 +70,15 @@
     (:goal
         (and
             (not (scanned_planet earth))
-            (results_of_planetary_scan mars)
-            (results_of_planetary_scan jupiter)
-            (studies_of_plasma_from_nebula nebula1)
-            (studies_of_plasma_from_nebula nebula2)
+            ; All landers should crash on Jupiter because it doesn't have a place to land.
+            (forall (?lnd - lander)
+                (disabled ?lnd)
+            )
+            ; All probes should get destroyed on region 2 attempting to scan Mars because of the
+            ; asteroid belt existing in the same region.
+            (forall (?prb - probe)
+                (disabled ?prb)
+            )
             (end_missions)
         )
     )
